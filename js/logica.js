@@ -64,41 +64,33 @@ function bucleJuego(){
 			ganado();
 		}
 
-	}, 1000/30);
+	}, 1000/25);
 }
-	
-function actualizarObj() {
-	pollito.actualizar();
 
-	var maices_cogidos = [];
+function colisiones() {
+
 	var cercas_golpeadas = [];
 
-	console.log("nuevo ciclo");
+	for(var i=objetos.cercas.length-1; i>=0; i--) {
 
-	for (var maiz in objetos.maices){
-
-		if(pollito.choca(objetos.maices[maiz])){
-			pollito.agregar_vida();
-			maices_cogidos.push(maiz);
-		}
-	}
-
-	for (var cerca in objetos.cercas){
-
-		if(pollito.choca(objetos.cercas[cerca])){
+		if(pollito.choca(objetos.cercas[i])){
+			objetos.cercas.splice(i, 1);
 			pollito.restar_vida();
-			cercas_golpeadas.push(cerca);
 		}
 	}
 
-	for (var m in maices_cogidos){
-		objetos.maices.splice(maices_cogidos[m], 1);
+	for(var i=objetos.maices.length-1; i>=0; i--) {
+		if(pollito.choca(objetos.maices[i])){
+			objetos.maices.splice(i, 1);
+			pollito.agregar_vida();
+		}
 	}
 
-	for (var c in cercas_golpeadas){
-		console.log("eliminando: ", cercas_golpeadas[c]);
-		objetos.cercas.splice(cercas_golpeadas[c], 1);
-	}
+}
+
+function actualizarObj() {
+	pollito.actualizar();
+	colisiones();
 }
 
 function teclado(){
